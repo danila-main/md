@@ -30,17 +30,17 @@ void update_forces()
                 get_distance_vector(i, j, &dx, &dy, &dz);
                 dr = sqrt(dx*dx + dy*dy + dz*dz);
                 dist[l] = dr;
-                k = (-1.0) * q[i] * q[j];
+                k = q[i] * q[j];
                 f = k * (1.0/(dr * dr));
                 fx = f * dx/dr;
                 fy = f * dy/dr;
                 fz = f * dz/dr;
 
-                Fx[i] += fx; Fx[j] -= fx;
-                Fy[i] += fy; Fy[j] -= fy;
-                Fz[i] += fz; Fz[j] -= fz;
+                Fx[j] += fx; Fx[i] -= fx;
+                Fy[j] += fy; Fy[i] -= fy;
+                Fz[j] += fz; Fz[i] -= fz;
 
-                U += (-k*(1.0/dr));
+                U += k*(1.0/dr);
                 ++l;
             }
         }
