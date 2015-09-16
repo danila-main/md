@@ -14,9 +14,9 @@ int main()
     ne = 1e9;
     dt = 1e-12;
     H = 0.0;
-    initTe = 10.0;
-    initTp = 10.0;
-    t_max = 500.0*200.0*10.0*dt;
+    initTe = 2.32;
+    initTp = 1.0;
+    t_max = 1e-5;
     Lx = Ly = Lz = pow((double)Ne/ne,0.333333);
 
     assert(N % 2 == 0 );

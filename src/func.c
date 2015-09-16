@@ -112,29 +112,32 @@ void update_rank_forces(int mesh_node)
         }
     }
 
-    if( need_force(i, mesh_node) &&
-        need_force(j, mesh_node))
+    if(1)
     {
         l = 0;
         for(i = 0; i < N-1; ++i)
         {
             for(j = i+1; j < N; ++j)
             {
-                get_distance_vector(i, j, &dx, &dy, &dz);
-                dr = sqrt(dx*dx + dy*dy + dz*dz);
-                dist[l] = dr;
-                k = q[i] * q[j];
-                f = k * (1.0/(dr * dr));
-                fx = f * dx/dr;
-                fy = f * dy/dr;
-                fz = f * dz/dr;
+                if( need_force(i, mesh_node) &&
+                    need_force(j, mesh_node))
+                {
+                    get_distance_vector(i, j, &dx, &dy, &dz);
+                    dr = sqrt(dx*dx + dy*dy + dz*dz);
+                    dist[l] = dr;
+                    k = q[i] * q[j];
+                    f = k * (1.0/(dr * dr));
+                    fx = f * dx/dr;
+                    fy = f * dy/dr;
+                    fz = f * dz/dr;
 
-                Fx[j] += fx; Fx[i] -= fx;
-                Fy[j] += fy; Fy[i] -= fy;
-                Fz[j] += fz; Fz[i] -= fz;
+                    Fx[j] += fx; Fx[i] -= fx;
+                    Fy[j] += fy; Fy[i] -= fy;
+                    Fz[j] += fz; Fz[i] -= fz;
 
-                U += k*(1.0/dr);
-                ++l;
+                    U += k*(1.0/dr);
+                    ++l;
+                }
             }
         }
     }
