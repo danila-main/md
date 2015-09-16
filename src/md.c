@@ -31,6 +31,7 @@ int main()
     initK = K;
     initU = U;
     initE = E;
+    Imax = 0.0015 * fabs(initE) / t_max;
 
     FILE* f = fopen("energy", "w");
     double t;

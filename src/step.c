@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 #include "consts.h"
 #include "step.h"
 #include "func.h"
@@ -21,21 +22,47 @@ void B_update_velocity(int i, double dt);
 
 void B_step(double dt)
 {
-    int i;
+    int i, m;
+    int steps_num;
     U = K = KelXY = KelZ = KpXY = KpZ = 0.0;
-    for(i = 0; i < N; i++)
+
+    update_rank();
+    steps_num = (int)pow(10.0,(double)rank_max);
+    double tau = dt / steps_num;
+    for(m = 0; m < steps_num; ++m)
     {
-        B_update_position(i, dt);
+        for(i = 0; i < N; ++i)
+        {
+            B_update_position(i, tau);
+        }
+
+        if((m+1) != steps_num)
+            update_rank_forces(m+1);
+        else
+        {
+            U = K = KelXY = KelZ = KpXY = KpZ = 0.0;
+            update_forces();
+        }
+
+        for(i = 0; i < N; ++i)
+        {
+            if ( need_force(i, m+1) )
+            {
+                avEx = 0.5 * (Fx[i]/q[i] + pEx[i]); 
+                avEy = 0.5 * (Fy[i]/q[i] + pEy[i]); 
+                avEz = 0.5 * (Fz[i]/q[i] + pEz[i]);
+            }
+            else
+            {
+                assert(pEx[i] == Fx[i]/q[i]);
+                avEx = pEx[i]; 
+                avEy = pEy[i]; 
+                avEz = pEz[i];
+            }
+            B_update_velocity(i, tau);
+            get_kinetic_energy(i);
+        }
     }
-
-    update_forces();
-
-	for(i = 0; i < N; i++)
-	{
-	    B_update_velocity(i, dt);
-        get_kinetic_energy(i);
-	}
-
 	return;
 }
 
@@ -94,9 +121,6 @@ void B_update_velocity(int i, double dt)
 {
     omega = (H * q[i])/(c * m[i]);
 
-    avEx = 0.5 * (Fx[i]/q[i] + pEx[i]); 
-    avEy = 0.5 * (Fy[i]/q[i] + pEy[i]); 
-    avEz = 0.5 * (Fz[i]/q[i] + pEz[i]);
     Vx = vx[i]; Vy = vy[i]; Vz = vz[i];
 
     if(H != 0.0)

@@ -1,8 +1,8 @@
 #ifndef MD_CONSTS_H 
 #define MD_CONSTS_H 
 
-#define Ne 1
-#define Np 1
+#define Ne 100
+#define Np 100
 #define N (Ne + Np)
 
 extern double Lx, Ly, Lz;       /*cell size in each dimension*/ 
@@ -51,6 +51,11 @@ extern double dist[];
 extern double q[];
 extern double m[];
 extern int type[];
+
+extern double rank_tmp[N][N];
+extern int rank[];
+extern int rank_max;
+extern double Imax;
 
 #define ELECTRON 1
 #define PROTON 2

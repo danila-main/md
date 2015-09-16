@@ -47,3 +47,7 @@ double q[N];
 double m[N];
 int type[N];
 
+double rank_tmp[N][N];
+int rank[N];
+int rank_max = 0;
+double Imax = 0.0;
