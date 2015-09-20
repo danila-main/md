@@ -31,15 +31,15 @@ int main()
     initK = K;
     initU = U;
     initE = E;
-    Imax = 0.0015 * fabs(initE) / t_max;
+    Imax = 0.15 * fabs(initE) / t_max;
 
     FILE* f = fopen("energy", "w");
     double t;
     for(t = 0.0, i=0; t < t_max; t += dt, i++)
     {
         
-        if(i % 1000 == 0)
-            fprintf(f,"%.5g\t%.5g\t%.5g\t%.5g\n", t, KelXY, KelZ, E);
+        if(i % 10 == 0)
+            fprintf(stderr,"%.5g\t%.5g\t%.5g\t%.5g\n", t, KelXY, KelZ, E);
         
         U = K = KelXY = KelZ = KpXY = KpZ = 0.0;
         B_step(dt);

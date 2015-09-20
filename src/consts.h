@@ -1,8 +1,8 @@
 #ifndef MD_CONSTS_H 
 #define MD_CONSTS_H 
 
-#define Ne 1000
-#define Np 1000
+#define Ne 100
+#define Np 100
 #define N (Ne + Np)
 
 extern double Lx, Ly, Lz;       /*cell size in each dimension*/ 

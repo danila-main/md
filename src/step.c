@@ -27,7 +27,9 @@ void B_step(double dt)
     U = K = KelXY = KelZ = KpXY = KpZ = 0.0;
 
     update_rank();
-    steps_num = (int)pow(10.0,(double)rank_max);
+    if (rank_max > 10)
+        fprintf(stderr, "%d\n", rank_max);
+    steps_num = (int)pow(2.0,(double)rank_max);
     double tau = dt / steps_num;
     for(m = 0; m < steps_num; ++m)
     {

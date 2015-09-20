@@ -43,6 +43,7 @@ void update_rank()
     int s_max;
     int s;
     double R;
+    s_max = rank_max = 0;
     for(i = 0; i < N; ++i)
     {
         s_max = 0;
@@ -52,9 +53,11 @@ void update_rank()
             assert(rank_tmp[i][j] == rank_tmp[j][i]);
             assert(rank_tmp[i][j] > 0);
             R = sqrt( (N-1) * dt*dt * rank_tmp[i][j] / Imax);
-            s = (int)ceil(log10(R));
+            s = (int)ceil(log(R) / log(2));
             s = s > 0 ? s : 0;
-            if (s > s_max) s_max = s; 
+            if (s > s_max){
+                s_max = s; 
+            }
         }
         rank[i] = s_max;
         if (s_max > rank_max) rank_max = s_max; 
@@ -122,6 +125,8 @@ void update_rank_forces(int mesh_node)
                 if( need_force(i, mesh_node) &&
                     need_force(j, mesh_node))
                 {
+                    //if(rank[i] > 2 || rank[j] >2 )
+                    //fprintf(stderr,"%d(%d) - %d(%d)\n", i, rank[i], j, rank[j]);
                     get_distance_vector(i, j, &dx, &dy, &dz);
                     dr = sqrt(dx*dx + dy*dy + dz*dz);
                     dist[l] = dr;
@@ -230,5 +235,5 @@ double normal_rnd()
 int need_force(int part_num, int mesh_node)
 {
     double p = (double)rank_max - rank[part_num];
-    return mesh_node % (int)pow(10.0, p) == 0;
+    return mesh_node % (int)pow(2.0, p) == 0;
 }
